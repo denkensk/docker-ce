@@ -163,6 +163,11 @@ func pigzDecompress(archive io.Reader) (io.ReadCloser, <-chan struct{}, error) {
 	return cmdStream(exec.Command(args[0], args[1:]...), archive)
 }
 
+func pigzCompress(archive io.Reader) (io.ReadCloser, <-chan struct{}, error) {
+	args := []string{"unpigz", "-c"}
+	return cmdStream(exec.Command(args[0], args[1:]...), archive)
+}
+
 // DecompressStream decompresses the archive and returns a ReaderCloser with the decompressed archive.
 func DecompressStream(archive io.Reader) (io.ReadCloser, error) {
 	p := pools.BufioReader32KPool
@@ -228,7 +233,10 @@ func CompressStream(dest io.Writer, compression Compression) (io.WriteCloser, er
 		writeBufWrapper := p.NewWriteCloserWrapper(buf, buf)
 		return writeBufWrapper, nil
 	case Gzip:
-		gzWriter := gzip.NewWriter(dest)
+		gzWriter, err := gzip.NewWriterLevel(dest, 1)
+		if err != nil {
+			return nil, err
+		}
 		writeBufWrapper := p.NewWriteCloserWrapper(buf, gzWriter)
 		return writeBufWrapper, nil
 	case Bzip2, Xz:
