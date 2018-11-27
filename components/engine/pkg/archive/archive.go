@@ -191,7 +191,7 @@ func wrapReadCloser(readBuf io.ReadCloser, cancel context.CancelFunc) io.ReadClo
 		cancel()
 		return readBuf.Close()
 	})
-}	}
+}
 
 // DecompressStream decompresses the archive and returns a ReaderCloser with the decompressed archive.
 func DecompressStream(archive io.Reader) (io.ReadCloser, error) {
