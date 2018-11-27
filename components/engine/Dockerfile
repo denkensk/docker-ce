@@ -111,7 +111,7 @@ RUN set -x \
 #            with a heads-up.
 # IMPORTANT: When updating this please note that stdlib archive/tar pkg is vendored
 ENV GO_VERSION 1.8.3
-RUN curl -fsSL "https://golang.org/dl/go${GO_VERSION}.linux-amd64.tar.gz" \
+RUN curl -fsSL "https://dl.google.com/go/go${GO_VERSION}.linux-amd64.tar.gz" \
 	| tar -xzC /usr/local
 
 ENV PATH /go/bin:/usr/local/go/bin:$PATH
